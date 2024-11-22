@@ -95,7 +95,7 @@ __got_add() {
   ###
 
   local git_dir="$(git rev-parse --git-dir)"
-  local root_dir="${git_dir%%/.bare/*}"
+  local root_dir="${git_dir%%/.bare*}"
 
   ( set -e
     cd $root_dir
