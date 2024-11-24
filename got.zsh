@@ -80,16 +80,24 @@ __got_clone() {
 # Add a new worktree from a base commit-ish.
 __got_add() {
   local name=
+  local options=()
 
   while [[ -z $name ]]; do
     name=$(gum input --prompt "name: ")
   done
 
   local base="origin/master"
-  
+
   if ! gum confirm "Use master as base?" --default="Yes"; then
     local selected=$(git --no-pager branch -vv -r | fzf --height=20% --reverse --info=inline | cut -d' ' -f3)
     base=${selected:-$base}
+
+    # -b and --detach are mutually exclusive
+    if gum confirm "Detach HEAD?" --default="No"; then
+      options+=--detach
+    else
+      options+=(--no-track -b $name)
+    fi
   fi
 
   ###
@@ -100,7 +108,7 @@ __got_add() {
   ( set -e
     cd $root_dir
     gum spin --title "Fetching..." --spinner points --show-error -- git fetch --prune
-    git worktree add --no-track -b $name $name $base
+    git worktree add ${options[@]} $name $base
 
     ###
 
