@@ -17,15 +17,13 @@ GoT is an opinionated Git Worktrees tool.
 
 ### `got clone`
 
-Clone and prepare a repository for working with worktrees.
+Clones and prepares a repository for working with worktrees.
+
+The repository is cloned as "bare repository" and a worktree is automatically created for the "master" branch.
 
 ### `got add`
 
-Add a new worktree.
-
-Worktrees can be based off `master` or another branch.
-
-Use inside a worktree enabled repository.
+Adds a new worktree.
 
 ### `got del`
 
