@@ -91,13 +91,13 @@ __got_add() {
   if ! gum confirm "Use master as base?" --default="Yes"; then
     local selected=$(git --no-pager branch -vv -r | fzf --height=20% --reverse --info=inline | cut -d' ' -f3)
     base=${selected:-$base}
+  fi
 
-    # -b and --detach are mutually exclusive
-    if gum confirm "Detach HEAD?" --default="No"; then
-      options+=--detach
-    else
-      options+=(--no-track -b $name)
-    fi
+  # -b and --detach are mutually exclusive
+  if gum confirm "Detach HEAD?" --default="No"; then
+    options+=--detach
+  else
+    options+=(--no-track -b $name)
   fi
 
   ###
