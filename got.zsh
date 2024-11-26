@@ -54,16 +54,9 @@ __got_clone() {
 
     ###
 
-    local title=$(gum style "Repo is ready!" --foreground '#ff9e64' --bold)
-    local next_commands=$(
-      gum style \
+    __got_print_info "Repo is ready!" \
         "You are now inside the repository root directory." \
         "To add your first worktree, run: got add"
-    )
-
-    local full=$(gum join "$title" "$next_commands" --vertical)
-
-    gum style "$full" --border double --margin '1 2' --padding '0 2'
   )
 
   # must cd into the repo dir again because `cd` inside the subshell does not
@@ -112,11 +105,8 @@ __got_add() {
 
     ###
 
-    local title=$(gum style "Worktree is ready!" --foreground '#ff9e64' --bold)
-    local next_commands=$(gum style "You are now inside the worktree directory.")
-    local full=$(gum join "$title" "$next_commands" --vertical)
-
-    gum style "$full" --border double --margin '1 2' --padding '0 2'
+    __got_print_info "Worktree is ready!" \
+      "You are now inside the worktree directory."
   )
 
   [[ $? -eq 0 ]] && cd $root_dir/$name
@@ -146,6 +136,8 @@ __got_del() {
   ( set -e
     git worktree remove $tree > /dev/null
     git branch -D $branch > /dev/null
+
+
   )
 }
 
@@ -209,6 +201,21 @@ __got_print_error() {
   local message=$1
 
   gum style $message --foreground $ERROR_COLOR --margin $ERROR_MARGIN --bold
+}
+
+# Print information to user with nice style
+#
+# Params:
+#   - title
+#   - ...content text
+__got_print_info() {
+  local title=$(gum style $1 --foreground '#ff9e64' --bold)
+  shift
+
+  local content=$( gum style $@ )
+  local full=$(gum join "$title" "$content" --vertical)
+
+  gum style "$full" --border double --margin '1 2' --padding '0 2'
 }
 
 ### MAIN ###
