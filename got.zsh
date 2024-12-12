@@ -133,12 +133,15 @@ __got_del() {
   local tree=${selection[1]}
   local branch=${selection[2]}
 
+  echo Deleting...
+
   ( set -e
     git worktree remove $tree > /dev/null
     git branch -D $branch > /dev/null
-
-
   )
+
+  __got_print_info "Worktree $(basename "$tree") deleted!" \
+      "The corresponding branch "$branch" was deleted as well."
 }
 
 # command: got list
